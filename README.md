@@ -1,1 +1,1 @@
-# javascript-assignment
+# typescript-assignment

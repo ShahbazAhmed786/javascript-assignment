@@ -1,70 +1,110 @@
-// Define an interface for Product
-interface Product {
+// Define an interface for User
+interface User {
     id: number;
-    name: string;
-    price: number;
-    category: string;
+    username: string;
   }
   
-  // Create a type for Cart
-  type Cart = Product[];
-  
-  // Define an interface for Customer
-  interface Customer {
-    id: number;
-    name: string;
-    email: string;
-  }
-  
-  // Create a type for Order
-  type Order = {
-    customer: Customer;
-    cart: Cart;
+  // Create a type for Like
+  type Like = {
+    user: User;
+    timestamp: Date;
   };
   
-  // Implement a function to calculate the total price of products in the cart
-  function calculateTotalPrice(cart: Cart): number {
-    let totalPrice = 0;
+  // Define an interface for Comment
+  interface Comment {
+    id: number;
+    user: User;
+    content: string;
+    timestamp: Date;
+  }
   
-    for (const product of cart) {
-      totalPrice += product.price;
+  // Define an interface for Post
+  interface Post {
+    id: number;
+    content: string;
+    likes: Like[];
+    comments: Comment[];
+    user: User;
+  }
+  
+  // Define an interface for Profile
+  interface Profile {
+    id: number;
+    username: string;
+    bio: string;
+    posts: Post[];
+  }
+  
+  // Implement a function to find the most liked post and the user who posted it
+  function findMostLikedPost(profiles: Profile[]): { post: Post | null; user: User | null } {
+    let mostLikedPost: Post | null = null;
+    let mostLikedUser: User | null = null;
+    let maxLikes = 0;
+  
+    for (const profile of profiles) {
+      for (const post of profile.posts) {
+        if (post.likes.length > maxLikes) {
+          maxLikes = post.likes.length;
+          mostLikedPost = post;
+          mostLikedUser = profile;
+        }
+      }
     }
   
-    return totalPrice;
+    return { post: mostLikedPost, user: mostLikedUser };
   }
   
   // Example usage:
-  const customer: Customer = {
+  const user1: User = { id: 1, username: "user1" };
+  const user2: User = { id: 2, username: "user2" };
+  
+  const profile1: Profile = {
     id: 1,
-    name: "John Doe",
-    email: "john@example.com",
+    username: "user1",
+    bio: "Bio for user1",
+    posts: [
+      {
+        id: 1,
+        content: "Post 1 by user1",
+        likes: [{ user: user1, timestamp: new Date("2023-01-15") }],
+        comments: [],
+        user: user1,
+      },
+      {
+        id: 2,
+        content: "Post 2 by user1",
+        likes: [
+          { user: user1, timestamp: new Date("2023-01-16") },
+          { user: user2, timestamp: new Date("2023-01-17") },
+        ],
+        comments: [],
+        user: user1,
+      },
+    ],
   };
   
-  const cart: Cart = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: 10,
-      category: "Category A",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 20,
-      category: "Category B",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: 15,
-      category: "Category A",
-    },
-  ];
-  
-  const order: Order = {
-    customer,
-    cart,
+  const profile2: Profile = {
+    id: 2,
+    username: "user2",
+    bio: "Bio for user2",
+    posts: [
+      {
+        id: 3,
+        content: "Post 1 by user2",
+        likes: [{ user: user1, timestamp: new Date("2023-01-18") }],
+        comments: [],
+        user: user2,
+      },
+    ],
   };
   
-  const totalPrice = calculateTotalPrice(order.cart);
-  console.log(`Total Price: $${totalPrice}`);
+  const profiles: Profile[] = [profile1, profile2];
+  
+  const { post, user } = findMostLikedPost(profiles);
+  
+  if (post && user) {
+    console.log(`Most Liked Post by ${user.username}: ${post.content}`);
+  } else {
+    console.log("No posts found.");
+  }
+  

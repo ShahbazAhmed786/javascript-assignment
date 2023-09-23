@@ -1,53 +1,41 @@
-// Implement a function to sort posts based on the number of comments
-function sortPostsByComments(posts) {
-    return posts.slice().sort(function (postA, postB) { return postB.comments.length - postA.comments.length; });
+// Implement a function to calculate the total price of products in the cart
+function calculateTotalPrice(cart) {
+    var totalPrice = 0;
+    for (var _i = 0, cart_1 = cart; _i < cart_1.length; _i++) {
+        var product = cart_1[_i];
+        totalPrice += product.price;
+    }
+    return totalPrice;
 }
 // Example usage:
-var author1 = {
+var customer = {
     id: 1,
     name: "John Doe",
-    bio: "A passionate writer.",
+    email: "john@example.com",
 };
-var author2 = {
-    id: 2,
-    name: "Jane Smith",
-    bio: "An avid reader and blogger.",
+var cart = [
+    {
+        id: 1,
+        name: "Product 1",
+        price: 10,
+        category: "Category A",
+    },
+    {
+        id: 2,
+        name: "Product 2",
+        price: 20,
+        category: "Category B",
+    },
+    {
+        id: 3,
+        name: "Product 3",
+        price: 15,
+        category: "Category A",
+    },
+];
+var order = {
+    customer: customer,
+    cart: cart,
 };
-var post1 = {
-    id: 1,
-    title: "Post 1",
-    content: "This is the content of Post 1.",
-    author: author1,
-    comments: [
-        {
-            author: author2,
-            content: "Great post!",
-            timestamp: new Date("2023-01-15"),
-        },
-        {
-            author: author1,
-            content: "Thank you!",
-            timestamp: new Date("2023-01-16"),
-        },
-    ],
-};
-var post2 = {
-    id: 2,
-    title: "Post 2",
-    content: "This is the content of Post 2.",
-    author: author2,
-    comments: [
-        {
-            author: author1,
-            content: "Interesting read.",
-            timestamp: new Date("2023-01-17"),
-        },
-    ],
-};
-var posts = [post1, post2];
-// Sort posts by the number of comments
-var sortedPosts = sortPostsByComments(posts);
-console.log("Sorted Posts by Number of Comments:");
-sortedPosts.forEach(function (post) {
-    console.log("Title: ".concat(post.title, ", Comments: ").concat(post.comments.length));
-});
+var totalPrice = calculateTotalPrice(order.cart);
+console.log("Total Price: $".concat(totalPrice));
